@@ -91,6 +91,50 @@ public class ch1 {
 	}
 
 
+	/*
+	* compresses a string
+	*/
+	public static String stringComp(String str) {
+		StringBuffer compStr = new StringBuffer();
+		boolean newWord = true;
+		int count = 0;
+		char c1, c2, numChar;
+		String num;
+
+		for (int i = 0; i < str.length(); i++) {
+			c1 = str.charAt(i);
+			if (i > 0) {
+				c2 = str.charAt(i - 1);
+				// increase count if current char is same as previous
+				if (c1 == c2) {
+					count++;
+				}
+				else {
+					// add char and number of times on character transition
+					num = Integer.toString(count);
+					numChar = num.charAt(0);
+					compStr.append(numChar);
+					compStr.append(c1);
+					count = 1;
+				}
+			}
+			else {
+				compStr.append(c1);
+				count++;
+			}
+		}
+		// add count for final character
+		num = Integer.toString(count);
+		numChar = num.charAt(0);
+		compStr.append(numChar);
+
+		if (compStr.length() == str.length()) {
+			return str;
+		}
+		return compStr.toString();
+	}
+
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -111,13 +155,17 @@ public class ch1 {
 	    */
 
 	    /*
-	    char[] chars = 
-	    */
 	    char sentence[] = new char[100];
 	    String sentence1 = "Mr John Smith       ";
 	    sentence = sentence1.toCharArray();
 	    sentence = replaceSpaces(sentence);
 	    System.out.println(sentence);
+	    */
+
+	    /*
+	    String word = "aabcccccaaad";
+	    System.out.println(stringComp(word));
+	    */
 
 	}
 
