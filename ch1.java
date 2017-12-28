@@ -1,7 +1,7 @@
 
 
 import java.lang.StringBuffer;
-
+import java.util.Arrays;
 
 /**
  * @author Ryan Boehm
@@ -135,6 +135,40 @@ public class ch1 {
 	}
 
 
+	/*
+	* rotates and m x n matrix 90 degrees
+	*/
+	public static int[][] matrixRotate( int[][] multi ) {
+		int i, j;
+		int h = multi.length;
+		int w = multi[0].length;
+		// normall multi[h][w] - change to multi[w][h] to rotate
+		int[][] multiRotate = new int[w][h];
+		i = 0;
+		while (i < h) {
+			j = 0;
+			while (j < w) {
+				multiRotate[j][i] = multi[i][j];
+				j++;
+			}
+			i++;
+		}
+		return multiRotate;
+	}
+
+
+	public static void printGrid( int[][] multi ) {
+		int h = multi.length;
+		int w = multi[0].length;
+   		for (int i = 0; i < h; i++) {
+      		for (int j = 0; j < w; j++) {
+         		System.out.print(multi[i][j]);
+      		}
+      		System.out.println();
+   		}
+	}
+
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -166,6 +200,15 @@ public class ch1 {
 	    String word = "aabcccccaaad";
 	    System.out.println(stringComp(word));
 	    */
+
+	    int[][] multi2 = new int[][]{
+		  { 4, 2, 1 },
+		  { 5, 9, 3 },
+		  { 6, 3, 1 },
+		  { 0, 7, 4 },
+		  { 1, 2, 7 }
+		};
+		printGrid(matrixRotate(multi2));
 
 	}
 
