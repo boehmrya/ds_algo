@@ -59,6 +59,38 @@ public class ch1 {
 	}
 
 
+	/*
+	* returns the last non white space char in sentence
+	*/
+	public static int lastLetter(char sentence[]) {
+		int i = (sentence.length - 1);
+		while (sentence[i] == ' ' || sentence[i] == '\t' || sentence[i] == '\n') {
+			i--;
+		}
+		return i;
+	}
+
+
+	/*
+	* replace each space in character array with a %20
+	*/
+	public static char[] replaceSpaces(char sentence[]) {
+		for (int i = 0; i < lastLetter(sentence); i++) {
+			if (sentence[i] == ' ') {
+				// rotate remaining characters back two slots
+				for (int j = lastLetter(sentence); j > i; j--) {
+					sentence[j + 2] = sentence[j];
+				}
+				// replace chars
+				sentence[i] = '%';
+				sentence[i + 1] = '2';
+				sentence[i + 2] = '0';	
+			}
+		}
+		return sentence;
+	}
+
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -70,11 +102,23 @@ public class ch1 {
 	    System.out.println("Test Word 2: " + uniqueChars(testWord2));
 	    */
 
+	    /*
 	    String testWord1 = "hello";
 	    String testWord2 = "olelh";
 	    String testWord3 = "olelll";
 	    System.out.println("Test 1: " + strPermutation(testWord1, testWord2));
 	    System.out.println("Test 2: " + strPermutation(testWord1, testWord3));
+	    */
+
+	    /*
+	    char[] chars = 
+	    */
+	    char sentence[] = new char[100];
+	    String sentence1 = "Mr John Smith       ";
+	    sentence = sentence1.toCharArray();
+	    sentence = replaceSpaces(sentence);
+	    System.out.println(sentence);
+
 	}
 
 }
