@@ -74,6 +74,46 @@ class SingleLList<Integer> {
     public void clear( ) {
         head = null;
     }
+
+    /*
+    * removes duplicate nodes
+    */
+    public void removeDups() {
+    	Node current = head;
+    	Node position;
+    	int count, scount, tcount, currentData;
+    	
+    	count = 1;
+    	while (current != null) {
+    		currentData = current.data;
+    		position = current.next;
+    		scount = count;
+
+    		while (position != null) {
+    			if (position.data == currentData) {
+
+    				// change previous node's pointer
+    				position = current.next;
+    				tcount = count;
+    				while (tcount < (scount - 1)) {
+    					position = position.next;
+    					tcount++;
+    				}
+    				position.next = position.next.next;
+    				
+    				// go back to one node after current
+    				position = current.next;
+    				scount = count;
+    			}
+    			else { // otherwise, keep going
+    				position = position.next;
+    				scount++;
+    			}
+    		}
+    		count++;
+    		current = current.next;
+    	}	
+    }
       
 }
 
@@ -389,6 +429,7 @@ public class practice {
 		System.out.println(isRotation(str1, str2));
 		*/
 
+		// initialize a list with 10 data points
 		SingleLList testList = new SingleLList();
 		testList.addToStart(5);
 		testList.addToStart(10);
@@ -399,7 +440,11 @@ public class practice {
 		testList.addToStart(5);
 		testList.addToStart(6);
 		testList.addToStart(5);
-		testList.addToStart(2);
+		testList.addToStart(3);
+		//testList.outputList();
+
+		// remove dups
+		testList.removeDups();
 		testList.outputList();
 
 
