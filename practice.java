@@ -7,7 +7,7 @@ import java.util.LinkedList;
 /**
  * @author Ryan Boehm
  */
-public class ch1 {
+public class practice {
 
 	/*
 	* determines if a string has unique characters
