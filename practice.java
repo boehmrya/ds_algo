@@ -140,6 +140,34 @@ class SingleLList<Integer> {
     	}
     	System.out.println("kth to last element: " + position.data);
     }
+
+    /*
+	* remove the middle node in a singly linked list.
+	*/
+	public void removeMiddle() {
+		Node position = head;
+		int count, n;
+
+		// find length of list
+		count = 0;
+		while (position != null) {
+			position = position.next;
+			count++;
+		}
+
+		// calculate middle element
+		// traverse the list to the previous node
+		n = count / 2;
+		count = 0;
+		position = head;
+		while (count < (n - 1)) {
+			position = position.next;
+			count++;
+		}
+
+		// connect previous node to node after middle element
+		position.next = position.next.next;
+	}
       
 }
 
@@ -467,12 +495,15 @@ public class practice {
 		testList.addToStart(6);
 		testList.addToStart(5);
 		testList.addToStart(3);
+		testList.addToStart(4);
 		//testList.outputList();
 
 		// remove dups
 		//testList.removeDups();
 		testList.outputList();
-		testList.kthToLast(4);
+		//testList.kthToLast(4);
+		testList.removeMiddle();
+		testList.outputList();
 		
 
 
