@@ -5,10 +5,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 
+
 /*
 * Singly linked list class
 */
-class SingleLList<Integer> {
+public class SingleLList<Integer> {
     
     private class Node {
         private int data;
@@ -74,7 +75,8 @@ class SingleLList<Integer> {
     public void clear( ) {
         head = null;
     }
-      
+    
+     
 }
 
 
@@ -390,16 +392,7 @@ public class practice {
 		*/
 
 		SingleLList testList = new SingleLList();
-		testList.addToStart(5);
-		testList.addToStart(10);
-		testList.addToStart(6);
-		testList.addToStart(9);
-		testList.addToStart(3);
-		testList.addToStart(4);
-		testList.addToStart(5);
-		testList.addToStart(6);
-		testList.addToStart(5);
-		testList.addToStart(2);
+		testList.addToStart(new Node(5));
 		testList.outputList();
 
 
