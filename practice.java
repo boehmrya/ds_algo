@@ -114,6 +114,32 @@ class SingleLList<Integer> {
     		current = current.next;
     	}	
     }
+
+
+    /*
+    * find kth to last element of linked list, print it.
+    */
+    public void kthToLast( int k) {
+    	Node position = head;
+    	int count, n;
+
+    	// get the length of the list
+    	count = 0;
+    	while (position != null) {
+    		position = position.next;
+    		count++;
+    	}
+
+    	// calculate kth-to-last index and go back through to find node
+    	n = count - k;
+    	count = 0;
+    	position = head;
+    	while(count < n) {
+    		position = position.next;
+    		count++;
+    	}
+    	System.out.println("kth to last element: " + position.data);
+    }
       
 }
 
@@ -444,8 +470,10 @@ public class practice {
 		//testList.outputList();
 
 		// remove dups
-		testList.removeDups();
+		//testList.removeDups();
 		testList.outputList();
+		testList.kthToLast(4);
+		
 
 
 	}
