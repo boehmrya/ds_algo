@@ -168,7 +168,55 @@ class SingleLList<Integer> {
 		// connect previous node to node after middle element
 		position.next = position.next.next;
 	}
-      
+
+	/*
+	* partition list so that all values less than k come before it,
+	* and all values greater than k come after it.
+	*/
+	public void partition(int k) {
+		// set up first two pointers to iterate through list
+		Node secondPosition = head;
+		Node firstPosition = secondPosition.next;
+		boolean hasPartition = false;
+
+		// use first pointer to determine if list has partition
+		// if so, remove partition node and place it at the front of the list
+		while (firstPosition != null) {
+			if (firstPosition.data == k) {
+				hasPartition = true;
+				// remove the node
+				secondPosition.next = firstPosition.next;
+				// add partition to beginning of list
+				head = new Node(k, head);
+			}
+			secondPosition = secondPosition.next;
+			firstPosition = secondPosition.next;
+		}
+
+		if (hasPartition == true) {
+			// reset pointers
+			secondPosition = head;
+			firstPosition = secondPosition.next;
+
+			// have first and second position pointers go through list.
+			// if first position value is less than the partition, remove, and add to the front of the list
+			while(firstPosition != null) {
+				if (firstPosition.data < k) {
+					// add partition to beginning of list
+					head = new Node(firstPosition.data, head);
+					// remove the node
+					secondPosition.next = firstPosition.next;
+				}
+				secondPosition = secondPosition.next;
+				firstPosition = secondPosition.next;
+			}
+		}
+		else {
+			System.out.println("list doesn't have partition value");
+		}
+	}
+
+
 }
 
 
@@ -502,7 +550,8 @@ public class practice {
 		//testList.removeDups();
 		testList.outputList();
 		//testList.kthToLast(4);
-		testList.removeMiddle();
+		//testList.removeMiddle();
+		testList.partition(4);
 		testList.outputList();
 		
 
