@@ -39,7 +39,7 @@ class SingleLList<Integer> {
      * Removes the head node and returns true if the list contains at
      * least one node. Returns false if the list is empty.
     */
-    public boolean deleteHeadNode( ) {
+    public boolean deleteHeadNode() {
         if (head != null) {
             head = head.next;
             return true;
@@ -214,6 +214,59 @@ class SingleLList<Integer> {
 		else {
 			System.out.println("list doesn't have partition value");
 		}
+	}
+
+
+	/*
+	* get sum of linked list.  Assumes that every node has a single digit.
+	* the first node starts at the 1 digit, then 10, 100, 1000, etc.
+	*/
+	public int digitSumBack() {
+		Node position = head;
+		int count = 1;
+		int total = 0;
+
+		while (position != null) {
+			if (position != head) {
+				count = count * 10;
+			}
+			total = total + (position.data * count);
+			position = position.next;
+		}
+		return total;
+	}
+
+
+	/*
+	* get sum of linked list.  Assumes that every node has a single digit.
+	* the first node starts at the largest digit, then goes down: 100, 10, 1, etc.
+	*/
+	public int digitSumFor() {
+		Node position = head;
+		int length = 0;
+		int count = 1;
+		int total = 0;
+
+		// get the length of the list
+		while (position != null) {
+			length++;
+			position = position.next;
+		}
+
+		// calculate the first digit place (1, 10, 100, etc.)
+		while (length > 1) {
+			count *= 10;
+			length--;
+		}
+
+		// get the sum
+		position = head;
+		while (position != null) {
+			total = total + (position.data * count);
+			count = count /= 10;
+			position = position.next;
+		}
+		return total;
 	}
 
 
@@ -481,6 +534,16 @@ public class practice {
 	}
 
 
+
+	public static int listSumBack(SingleLList num1, SingleLList num2) {
+		return (num1.digitSumBack() + num2.digitSumBack());
+	}
+
+	public static int listSumFor(SingleLList num1, SingleLList num2) {
+		return (num1.digitSumFor() + num2.digitSumFor());
+	}
+
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -546,14 +609,29 @@ public class practice {
 		testList.addToStart(4);
 		//testList.outputList();
 
-		// remove dups
-		//testList.removeDups();
-		testList.outputList();
-		//testList.kthToLast(4);
-		//testList.removeMiddle();
-		testList.partition(4);
-		testList.outputList();
-		
+		SingleLList testList2 = new SingleLList();
+		testList2.addToStart(6);
+		testList2.addToStart(1);
+		testList2.addToStart(7);
+
+		SingleLList testList3 = new SingleLList();
+		testList3.addToStart(2);
+		testList3.addToStart(9);
+		testList3.addToStart(5);
+
+		SingleLList testList4 = new SingleLList();
+		testList4.addToStart(7);
+		testList4.addToStart(1);
+		testList4.addToStart(6);
+
+		SingleLList testList5 = new SingleLList();
+		testList5.addToStart(5);
+		testList5.addToStart(9);
+		testList5.addToStart(2);
+
+
+		System.out.println(listSumBack(testList2, testList3));	
+		System.out.println(listSumFor(testList4, testList5));	
 
 
 	}
