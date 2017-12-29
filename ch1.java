@@ -2,6 +2,7 @@
 
 import java.lang.StringBuffer;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @author Ryan Boehm
@@ -157,6 +158,51 @@ public class ch1 {
 	}
 
 
+	/*
+	* rotates and m x n matrix 90 degrees
+	*/
+	public static int[][] rowColZero( int[][] multi ) {
+		int i, j, k;
+		int rows = multi.length;
+		int cols = multi[0].length;
+		LinkedList<Integer> zeroRows = new LinkedList();
+		LinkedList<Integer> zeroCols = new LinkedList();
+
+		i = 0;
+		while (i < rows) {
+			j = 0;
+			while (j < cols) {
+				if (multi[i][j] == 0 ) {
+					if ((zeroRows.isEmpty() && zeroCols.isEmpty()) || (!zeroRows.contains(i) && !zeroCols.contains(j))) {
+						// track which rows and cols have already been zero'd
+						zeroRows.add(i);
+						zeroCols.add(j);
+
+						k = 0;
+						// hold col # constant, set each row value to zero
+						while (k < rows) {
+							multi[k][j] = 0;
+							k++;
+						}
+						k = 0;
+						// hold row # constant, set each col value to zero
+						while (k < cols) {
+							multi[i][k] = 0;
+							k++;
+						}
+					}
+				}
+				j++;
+			}
+			i++;
+		}
+		return multi;
+	}
+
+
+	/*
+	* prints a two-dimensional grid.
+	*/
 	public static void printGrid( int[][] multi ) {
 		int h = multi.length;
 		int w = multi[0].length;
@@ -202,13 +248,14 @@ public class ch1 {
 	    */
 
 	    int[][] multi2 = new int[][]{
-		  { 4, 2, 1 },
-		  { 5, 9, 3 },
-		  { 6, 3, 1 },
-		  { 0, 7, 4 },
-		  { 1, 2, 7 }
+		  { 4, 2, 1, 4 },
+		  { 5, 9, 3, 0 },
+		  { 6, 3, 2, 9 },
+		  { 0, 7, 4, 4 },
+		  { 1, 2, 7, 6 }
 		};
-		printGrid(matrixRotate(multi2));
+		//printGrid(matrixRotate(multi2));
+		printGrid(rowColZero(multi2));
 
 	}
 
