@@ -215,6 +215,55 @@ public class ch1 {
 	}
 
 
+	/*
+	* determine if str2 is a rotation of str1
+	*/
+	public static boolean isRotation( String str1, String str2 ) {
+		int i, j, temp, total;
+		char firstChar = str1.charAt(0);
+
+		// return false if strings aren't the same length
+		if (str1.length() != str2.length()) {
+			return false;
+		}
+
+		// otherwise check rotation
+		i = 0;
+		while (i < str2.length()) {
+			if (str2.charAt(i) == firstChar) {
+				j = 0;
+				temp = i;
+				total = 1;
+				while ((i < str2.length()) && (str2.charAt(i) == str1.charAt(j))) {
+					i++;
+					j++;
+					total++;
+				}
+				if (i == str2.length()) {
+					i = 0;
+					while ((j < str1.length()) && (str2.charAt(i) == str1.charAt(j))) {
+						i++;
+						j++;
+						total++;
+					}
+					if (total == (str1.length() + 1)) {
+						return true;
+					}
+					else {
+						total = 0;
+						i = temp;
+					}
+				}
+				else {
+					i = temp;
+				}
+			}
+			i++;
+		}
+		return false;
+	}
+
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -247,6 +296,7 @@ public class ch1 {
 	    System.out.println(stringComp(word));
 	    */
 
+	    /*
 	    int[][] multi2 = new int[][]{
 		  { 4, 2, 1, 4 },
 		  { 5, 9, 3, 0 },
@@ -255,7 +305,13 @@ public class ch1 {
 		  { 1, 2, 7, 6 }
 		};
 		//printGrid(matrixRotate(multi2));
-		printGrid(rowColZero(multi2));
+		//printGrid(rowColZero(multi2));
+		*/
+
+		String str1 = "erbottlewat";
+		String str2 = "aterbottlew";
+		System.out.println(isRotation(str1, str2));
+
 
 	}
 
