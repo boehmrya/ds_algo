@@ -269,6 +269,35 @@ class SingleLList<Integer> {
 		return total;
 	}
 
+	/*
+	* converts a singly-linked list into a circular-linked list by
+	*/
+	public void makeCircular() {
+		Node position = head;
+		while (position.next != null) {
+			position = position.next;
+		}
+		// point the last
+		position.next = head;
+	}
+
+	/*
+	* find the beginning of the loop in a circular linked list
+	*/
+	public boolean isCircular() {
+		Node position = head;
+		int headCount = 0;
+		while (position.next != null && headCount < 2) {
+			if ( position == head || position.next == head) {
+				headCount++;
+			}
+			position = position.next;
+		}
+		if (headCount == 2) {
+			return true;
+		}
+		return false;
+	}
 
 }
 
@@ -629,9 +658,9 @@ public class practice {
 		testList5.addToStart(9);
 		testList5.addToStart(2);
 
-
-		System.out.println(listSumBack(testList2, testList3));	
-		System.out.println(listSumFor(testList4, testList5));	
+		System.out.println(testList.isCircular());
+		testList.makeCircular();
+		System.out.println(testList.isCircular());
 
 
 	}
