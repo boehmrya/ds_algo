@@ -5,6 +5,52 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 
+
+class SetOfStacks<T> {
+
+	private int limit;
+	private int count;
+	private LinkedList<Stack<T>> stackList;
+
+	// constructor
+	public SetOfStacks(int limit) {
+		this.limit = limit;
+		this.count = 0;
+		this.stackList = new LinkedList<Stack<T>>();
+	}
+
+	T pop() {
+		if (!stackList.isEmpty()) { // set of stacks is empty
+			int i = count / limit;
+			T item = stackList.get(i).pop();
+			count--;
+			return item;
+		}
+		return null;
+	}
+
+	void push(T item) {
+		if (stackList.isEmpty()) {
+			Stack<T> newStack = new Stack<T>();
+			newStack.push(item);
+			stackList.add(newStack);
+			count++;
+		}
+		else {
+			int i = count / limit;
+			stackList.get(i).push(item);
+		}
+	}
+
+	void printStacks() {
+		int i = 0;
+		while (i < stackList.size()) {
+			stackList.get(i).printStack();
+			i++;
+		}
+	}
+}
+
 /**
  *
  * Stack class
@@ -901,20 +947,27 @@ public class practice {
 		testList5.addToStart(7);
 		*/
 
+
 		Stack<Integer> testStack = new Stack<Integer>();
 		testStack.push(2);
 		testStack.push(5);
 		testStack.push(7);
-		testStack.printStack();
+		//testStack.printStack();
 
 
 		Queue<Integer> testQueue = new Queue<Integer>();
 		testQueue.enqueue(5);
 		testQueue.enqueue(10);
 		testQueue.enqueue(7);
-		testQueue.printQueue();
+		//testQueue.printQueue();
 
-		System.out.println("min of stack: " + testStack.getMin());
+
+		SetOfStacks<Integer> testSetStacks = new SetOfStacks<Integer>(2);
+		testSetStacks.push(6);
+		testSetStacks.push(2);
+		testSetStacks.push(9);
+		testSetStacks.push(4);
+		testSetStacks.printStacks();
 
 
 	}
