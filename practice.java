@@ -5,6 +5,42 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 
+class MyQueue<T> {
+
+	private Stack<T> s1;
+	private Stack<T> s2;
+
+	public MyQueue() {
+		this.s1 = new Stack<T>();
+		this.s2 = new Stack<T>();
+	}
+
+	void enqueue(T item) {
+		s1.push(item);
+	}
+
+	T dequeue() {
+		while (!s1.isEmpty()) {
+			s2.push(s1.pop());
+		}
+		T item = s2.pop();
+		while(!s2.isEmpty()) {
+			s1.push(s2.pop());
+		}
+		return item;
+	}
+
+	void printMyQueue() {
+		while (!s1.isEmpty()) {
+			s2.push(s1.pop());
+		}
+		while(!s2.isEmpty()) {
+			T item = s2.pop();
+			System.out.println(item);
+			s1.push(item);
+		}
+	}
+}
 
 class SetOfStacks<T> {
 
@@ -963,7 +999,17 @@ public class practice {
 		//testSetStacks.printStacks();
 
 		// run tower of hanoi program
-		towerOfHanoi();
+		//towerOfHanoi();
+
+		MyQueue<Integer> testMyQueue = new MyQueue<Integer>();
+		testMyQueue.enqueue(3);
+		testMyQueue.enqueue(5);
+		testMyQueue.enqueue(9);
+		testMyQueue.enqueue(10);
+
+		testMyQueue.printMyQueue();
+		testMyQueue.dequeue();
+		testMyQueue.printMyQueue();
 
 
 	}
