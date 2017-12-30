@@ -35,6 +35,19 @@ class SingleLList<Integer> {
         head = new Node(data, head);
     }
 
+    /*
+    * returns the length of a linked list
+    */
+    public int listLength() {
+    	Node position = head;
+    	int length = 1;
+    	while (position.next != null) {
+    		position = position.next;
+    		length++;
+    	}
+    	return length;
+    }
+
     /**
      * Removes the head node and returns true if the list contains at
      * least one node. Returns false if the list is empty.
@@ -47,8 +60,14 @@ class SingleLList<Integer> {
         else
             return false;
     }
+
+    /*
+    * returns the value of the first node
+    */
+    public int peek() {
+    	return head.data;
+    }
  
-    
     /**
      * Prints out the keys and values for every item in the linked list.
      */
@@ -297,6 +316,36 @@ class SingleLList<Integer> {
 			return true;
 		}
 		return false;
+	}
+
+	/*
+	* reverses a linked list
+	*/	
+	public void reverse() {
+		Node secondPosition = head;
+		Node firstPosition = secondPosition.next;
+		int length = 1;
+		int count = 0;
+
+		// get the length of the list
+		while (firstPosition.next != null) {
+			firstPosition = firstPosition.next;
+			length++;
+		}
+		// reset first position
+		firstPosition = secondPosition.next;
+
+		while (count < length) {
+			while (firstPosition.next != null) {
+				secondPosition = secondPosition.next;
+				firstPosition = secondPosition.next;
+			}
+			// make the last item the first
+			firstPosition.next = head;
+			head = firstPosition;
+			secondPosition.next = null;
+			count++;
+		}
 	}
 
 }
@@ -563,13 +612,39 @@ public class practice {
 	}
 
 
-
+	/*
+	* sums two singly-linked lists representing digits (arranged in a backward manner)
+	*/
 	public static int listSumBack(SingleLList num1, SingleLList num2) {
 		return (num1.digitSumBack() + num2.digitSumBack());
 	}
 
+	/*
+	* sums two singly-linked lists representing digits (arranged in a forward manner)
+	*/
 	public static int listSumFor(SingleLList num1, SingleLList num2) {
 		return (num1.digitSumFor() + num2.digitSumFor());
+	}
+
+	/*
+	* tests if two singly-linked lists are equal
+	*/
+	public static boolean listsEqual(SingleLList list1, SingleLList list2) {
+		// if the lists are different lengths, they aren't equal
+		if (list1.listLength() != list2.listLength()) {
+			return false;
+		}
+		// otherwise, compare each element's value
+		while (!list1.isEmpty() && !list2.isEmpty()) {
+			// compare head nodes
+			if (list1.peek() != list2.peek()) {
+				return false;
+			}
+			// remove head nodes
+			list1.deleteHeadNode();
+			list2.deleteHeadNode();
+		}
+		return true;
 	}
 
 
@@ -654,13 +729,13 @@ public class practice {
 		testList4.addToStart(6);
 
 		SingleLList testList5 = new SingleLList();
-		testList5.addToStart(5);
-		testList5.addToStart(9);
-		testList5.addToStart(2);
+		testList5.addToStart(7);
+		testList5.addToStart(1);
+		testList5.addToStart(6);
+		testList5.addToStart(6);
 
-		System.out.println(testList.isCircular());
-		testList.makeCircular();
-		System.out.println(testList.isCircular());
+
+		System.out.println(listsEqual(testList4, testList5));
 
 
 	}
