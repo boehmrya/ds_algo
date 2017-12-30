@@ -325,7 +325,7 @@ class SingleLList<Integer> {
 		Node secondPosition = head;
 		Node firstPosition = secondPosition.next;
 		int length = 1;
-		int count = 0;
+		int count = 1;
 
 		// get the length of the list
 		while (firstPosition.next != null) {
@@ -347,6 +347,23 @@ class SingleLList<Integer> {
 			count++;
 		}
 	}
+
+	/*
+	* copies one linked list into another
+	*/
+	public void copy(SingleLList other) {
+
+		Node position = other.head;
+		this.addToStart(position.data);
+
+		while (position.next != null) {
+			position = position.next;
+			this.addToStart(position.data);
+		}
+		this.reverse();
+	}
+
+
 
 }
 
@@ -647,6 +664,16 @@ public class practice {
 		return true;
 	}
 
+	/*
+	* tests if a linked list is a palindrome
+	*/
+	public static boolean isPalindrome(SingleLList list1) {
+		SingleLList list2 = new SingleLList();
+		list2.copy(list1);
+		list1.reverse();
+		return (listsEqual(list2, list1));
+	}
+
 
 	/**
 	 * @param args the command line arguments
@@ -731,11 +758,10 @@ public class practice {
 		SingleLList testList5 = new SingleLList();
 		testList5.addToStart(7);
 		testList5.addToStart(1);
-		testList5.addToStart(6);
-		testList5.addToStart(6);
+		testList5.addToStart(7);
 
 
-		System.out.println(listsEqual(testList4, testList5));
+		System.out.println(isPalindrome(testList5));
 
 
 	}
