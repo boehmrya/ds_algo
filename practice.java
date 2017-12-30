@@ -106,6 +106,21 @@ class Stack<T> {
 		return (top == null);
 	}
 
+	int length() {
+		int len = 0;
+		Stack<T> tempStack = new Stack<T>();
+		while (!this.isEmpty()) { // use temp buffer
+			T item = this.pop();
+			len++;
+			tempStack.push(item);
+		}
+		while(!tempStack.isEmpty()) { // replace original stack
+			T item = tempStack.pop();
+			this.push(item);
+		}
+		return len;
+	}
+
 	void printStack() {
 		Stack<T> tempStack = new Stack<T>();
 		while (!this.isEmpty()) { // use temp buffer
@@ -859,100 +874,78 @@ public class practice {
 		return (listsEqual(list2, list1));
 	}
 
+	public static void towerOfHanoi() {
+		int i, disc, numItems, target;
+
+		// initialize 3 stacks
+		Stack<Integer> stack1 = new Stack<Integer>();
+		Stack<Integer> stack2 = new Stack<Integer>();
+		Stack<Integer> stack3 = new Stack<Integer>();
+
+		// fill-up the first stack
+		stack1.push(5);
+		stack1.push(4);
+		stack1.push(3);
+		stack1.push(2);
+		stack1.push(1);
+
+		// create list of stacks
+		LinkedList<Stack<Integer>> stacks = new LinkedList<Stack<Integer>>();
+		stacks.add(stack1);
+		stacks.add(stack2);
+		stacks.add(stack3);
+
+		i = 0;
+		int prev = 0;
+		numItems = stacks.get(0).length();
+
+		while (stacks.get(2).length() != numItems) {
+			// examine disc
+			if (!stacks.get(i).isEmpty()) {
+				disc = stacks.get(i).peek();
+				// if we just moved this disc, skip and move onto next stack
+				if (disc == prev) {
+					prev = 0; // allows you to move this one on the next iteration
+					i = (i + 1) % 3;
+					continue;
+				}
+				target = -1;
+
+				// calculate the target
+				if ((stacks.get((i + 1) % 3).isEmpty()) || ((stacks.get((i + 1) % 3).peek()) > disc)) {
+					target = (i + 1) % 3;
+				}
+				else if ((stacks.get((i + 2) % 3).isEmpty()) || ((stacks.get((i + 2) % 3).peek()) > disc)) {
+					target = (i + 2) % 3;
+				}
+
+				// move disc if target is set
+				if (target != -1) {
+					disc = stacks.get(i).pop();
+					stacks.get(target).push(disc);
+					prev = disc;
+				}
+			}
+			
+			// iterate back through array repeatedly
+			i = (i + 1) % 3;
+		}
+
+		stacks.get(2).printStack();
+	}
+	
+
 
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		/*
-	    String testWord1 = "helloWorld";
-	    String testWord2 = "heloWrd";
-	    System.out.println("Test Word 1: " + uniqueChars(testWord1));
-	    System.out.println("Test Word 2: " + uniqueChars(testWord2));
-	    */
-
-	    /*
-	    String testWord1 = "hello";
-	    String testWord2 = "olelh";
-	    String testWord3 = "olelll";
-	    System.out.println("Test 1: " + strPermutation(testWord1, testWord2));
-	    System.out.println("Test 2: " + strPermutation(testWord1, testWord3));
-	    */
-
-	    /*
-	    char sentence[] = new char[100];
-	    String sentence1 = "Mr John Smith       ";
-	    sentence = sentence1.toCharArray();
-	    sentence = replaceSpaces(sentence);
-	    System.out.println(sentence);
-	    */
-
-	    /*
-	    String word = "aabcccccaaad";
-	    System.out.println(stringComp(word));
-	    */
-
-	    /*
-	    int[][] multi2 = new int[][]{
-		  { 4, 2, 1, 4 },
-		  { 5, 9, 3, 0 },
-		  { 6, 3, 2, 9 },
-		  { 0, 7, 4, 4 },
-		  { 1, 2, 7, 6 }
-		};
-		//printGrid(matrixRotate(multi2));
-		//printGrid(rowColZero(multi2));
-		*/
-
-		/*
-		String str1 = "erbottlewat";
-		String str2 = "aterbottlew";
-		System.out.println(isRotation(str1, str2));
-		*/
-
-		/*
-		// initialize a list with 10 data points
-		SingleLList testList = new SingleLList();
-		testList.addToStart(5);
-		testList.addToStart(10);
-		testList.addToStart(6);
-		testList.addToStart(9);
-		testList.addToStart(3);
-		testList.addToStart(4);
-		testList.addToStart(5);
-		testList.addToStart(6);
-		testList.addToStart(5);
-		testList.addToStart(3);
-		testList.addToStart(4);
-		//testList.outputList();
-
-		SingleLList testList2 = new SingleLList();
-		testList2.addToStart(6);
-		testList2.addToStart(1);
-		testList2.addToStart(7);
-
-		SingleLList testList3 = new SingleLList();
-		testList3.addToStart(2);
-		testList3.addToStart(9);
-		testList3.addToStart(5);
-
-		SingleLList testList4 = new SingleLList();
-		testList4.addToStart(7);
-		testList4.addToStart(1);
-		testList4.addToStart(6);
-
-		SingleLList testList5 = new SingleLList();
-		testList5.addToStart(7);
-		testList5.addToStart(1);
-		testList5.addToStart(7);
-		*/
-
 
 		Stack<Integer> testStack = new Stack<Integer>();
 		testStack.push(2);
 		testStack.push(5);
 		testStack.push(7);
-		//testStack.printStack();
+		//System.out.println(testStack.length());
 
 
 		Queue<Integer> testQueue = new Queue<Integer>();
@@ -967,7 +960,10 @@ public class practice {
 		testSetStacks.push(2);
 		testSetStacks.push(9);
 		testSetStacks.push(4);
-		testSetStacks.printStacks();
+		//testSetStacks.printStacks();
+
+		// run tower of hanoi program
+		towerOfHanoi();
 
 
 	}
