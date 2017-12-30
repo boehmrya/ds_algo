@@ -5,6 +5,145 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 
+/**
+ *
+ * Stack class
+ */
+class Stack<T> {
+
+	private class Node {
+		private T data;
+		private Node next;
+
+		public Node (T data, Node next) {
+			this.data = data;
+			this.next = next;
+		}
+	}
+
+	private Node top;
+	private T min;
+
+	T pop() {
+		if (top != null) {
+			T item = top.data;
+			top = top.next;
+			return item;
+		}
+		return null;
+	}
+
+	void push(T item) {
+		// update min value
+		if (top == null) { // if empty
+			this.min = item;
+		}
+		else {
+			if (item.equals(min)) {
+				min = item;
+			}
+		}
+		Node k = new Node(item, top);
+		k.next = top;
+		top = k;
+	}
+
+	T peek() {
+		return top.data;
+	}
+
+	T getMin() {
+		return min;
+	}
+
+	boolean isEmpty() {
+		return (top == null);
+	}
+
+	void printStack() {
+		Stack<T> tempStack = new Stack<T>();
+		while (!this.isEmpty()) { // use temp buffer
+			T item = this.pop();
+			System.out.println(item);
+			tempStack.push(item);
+		}
+		while(!tempStack.isEmpty()) { // replace original stack
+			T item = tempStack.pop();
+			this.push(item);
+		}
+		System.out.println();
+	}
+      
+}
+
+
+/*
+* Queue class
+*/
+class Queue<T> {
+
+	private class Node {
+		private T data;
+		private Node next;
+
+		public Node(T data, Node next) {
+			this.data = data;
+			this.next = next;
+		}
+	}
+
+	private Node first;
+	private Node last;
+
+	void enqueue(T item) {
+		if (first == null) {
+			last = new Node(item, null);
+			first = last;
+		}
+		else {
+			last.next = new Node(item, null);
+			last = last.next;
+		}
+	}
+
+	T dequeue() {
+		if (first != null) {
+			T item  = first.data;
+			first = first.next;
+			if (first == null) {
+				last = null;
+			}
+			return item;
+		}
+		return null;
+	}
+
+	T peek() {
+		return first.data;
+	}
+
+	boolean isEmpty() {
+		return (first == null);
+	}
+
+	void printQueue() {
+		Queue<T> tempQueue = new Queue<T>();
+		while (!this.isEmpty()) { // use temp buffer
+			T item = this.dequeue();
+			System.out.println(item);
+			tempQueue.enqueue(item);
+		}
+		while(!tempQueue.isEmpty()) { // replace original stack
+			T item = tempQueue.dequeue();
+			this.enqueue(item);
+		}
+		System.out.println();
+	}
+
+}
+
+
+
 /*
 * Singly linked list class
 */
@@ -725,6 +864,7 @@ public class practice {
 		System.out.println(isRotation(str1, str2));
 		*/
 
+		/*
 		// initialize a list with 10 data points
 		SingleLList testList = new SingleLList();
 		testList.addToStart(5);
@@ -759,9 +899,22 @@ public class practice {
 		testList5.addToStart(7);
 		testList5.addToStart(1);
 		testList5.addToStart(7);
+		*/
+
+		Stack<Integer> testStack = new Stack<Integer>();
+		testStack.push(2);
+		testStack.push(5);
+		testStack.push(7);
+		testStack.printStack();
 
 
-		System.out.println(isPalindrome(testList5));
+		Queue<Integer> testQueue = new Queue<Integer>();
+		testQueue.enqueue(5);
+		testQueue.enqueue(10);
+		testQueue.enqueue(7);
+		testQueue.printQueue();
+
+		System.out.println("min of stack: " + testStack.getMin());
 
 
 	}
