@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 
-class MyQueue<T> {
+
+class MyQueue<T extends Comparable<T>> {
 
 	private Stack<T> s1;
 	private Stack<T> s2;
@@ -42,7 +43,7 @@ class MyQueue<T> {
 	}
 }
 
-class SetOfStacks<T> {
+class SetOfStacks<T extends Comparable<T>> {
 
 	private int limit;
 	private int count;
@@ -91,7 +92,7 @@ class SetOfStacks<T> {
  *
  * Stack class
  */
-class Stack<T> {
+class Stack<T extends Comparable<T>> {
 
 	private class Node {
 		private T data;
@@ -170,14 +171,60 @@ class Stack<T> {
 		}
 		System.out.println();
 	}
-      
+
+
+	public void sortAsc() {
+		Stack<T> tempStack = new Stack<T>();
+		int len = 0;
+		int sorted = 0;
+		int toPop;
+		int i;
+		T min = this.peek();
+		T item = this.peek();
+		T temp = this.peek();
+		T prevMin = this.peek();
+
+		// get the length of the stack
+		len = this.length();
+
+		while (sorted < len) {
+			i = 0;
+			toPop = (len - sorted);
+			while (i < toPop) {
+				item = this.pop();
+				if (i == 0) { // set min to the first item
+					min = item;
+				}
+				else {
+					if (item.compareTo(min) < 0) {
+						prevMin = min;
+						tempStack.push(prevMin);
+						min = item;
+					}
+					else {
+						tempStack.push(item);
+					}
+				}
+				i++;
+			}
+			this.push(min); // put the current min on the stack
+			sorted++;
+
+			// put item back on the original stack
+			while (!tempStack.isEmpty()) {
+				temp = tempStack.pop();
+				this.push(temp);
+			}
+		}
+	}
+
 }
 
 
 /*
 * Queue class
 */
-class Queue<T> {
+class Queue<T extends Comparable<T>> {
 
 	private class Node {
 		private T data;
@@ -981,35 +1028,16 @@ public class practice {
 		testStack.push(2);
 		testStack.push(5);
 		testStack.push(7);
-		//System.out.println(testStack.length());
+		testStack.push(3);
+		testStack.push(4);
+		testStack.push(9);
+		//testStack.printStack();
+		testStack.sortAsc();
+		testStack.printStack();
 
 
-		Queue<Integer> testQueue = new Queue<Integer>();
-		testQueue.enqueue(5);
-		testQueue.enqueue(10);
-		testQueue.enqueue(7);
-		//testQueue.printQueue();
 
 
-		SetOfStacks<Integer> testSetStacks = new SetOfStacks<Integer>(2);
-		testSetStacks.push(6);
-		testSetStacks.push(2);
-		testSetStacks.push(9);
-		testSetStacks.push(4);
-		//testSetStacks.printStacks();
-
-		// run tower of hanoi program
-		//towerOfHanoi();
-
-		MyQueue<Integer> testMyQueue = new MyQueue<Integer>();
-		testMyQueue.enqueue(3);
-		testMyQueue.enqueue(5);
-		testMyQueue.enqueue(9);
-		testMyQueue.enqueue(10);
-
-		testMyQueue.printMyQueue();
-		testMyQueue.dequeue();
-		testMyQueue.printMyQueue();
 
 
 	}
