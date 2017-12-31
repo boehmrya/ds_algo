@@ -3,6 +3,7 @@
 import java.lang.StringBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Random;
 
 
 
@@ -1016,6 +1017,55 @@ public class practice {
 
 		stacks.get(2).printStack();
 	}
+
+
+	public static String animalShelter( int type ) {
+		String cat;
+		String dog;
+		int n;
+
+		// 0 = any, 1 = dog, 2 = cat
+		Queue<String> cats = new Queue<String>();
+		cats.enqueue("cat1");
+		cats.enqueue("cat2");
+		cats.enqueue("cat3");
+		cats.enqueue("cat4");
+		cats.enqueue("cat5");
+
+		Queue<String> dogs = new Queue<String>();
+		dogs.enqueue("dog1");
+		dogs.enqueue("dog2");
+		dogs.enqueue("dog3");
+		dogs.enqueue("dog4");
+		dogs.enqueue("dog5");
+
+		if (type == 0) {
+			Random rand = new Random();
+			n = rand.nextInt(2); // number between 0 and 1
+			if (n == 0) {
+				cat = cats.dequeue();
+				return cat;
+			}
+			else {
+				dog = dogs.dequeue();
+				return dog;
+			}
+		}
+		else if (type == 1) {
+			dog = dogs.dequeue();
+			return dog;
+		}
+		else if (type == 2) {
+			cat = cats.dequeue();
+			return cat;
+		}
+		else {
+			System.out.println("Must enter 1, 0, or 2");
+			return "";
+		}
+
+
+	}
 	
 
 
@@ -1033,9 +1083,9 @@ public class practice {
 		testStack.push(9);
 		//testStack.printStack();
 		testStack.sortAsc();
-		testStack.printStack();
+		//testStack.printStack();
 
-
+		System.out.println(animalShelter(0));
 
 
 
