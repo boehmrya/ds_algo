@@ -17,6 +17,7 @@ class Node {
 		System.out.print(dData);
 		System.out.print('}');
 	}
+
 } // end node class
 
 
@@ -50,7 +51,7 @@ class Tree {
 	// end find
 
 
-	public vode insert(int id, double dd) {
+	public void insert(int id, double dd) {
 		Node newNode = new Node();
 		newNode.iData = id;
 		newNode.dData = dd;
@@ -145,14 +146,175 @@ class Tree {
 
 		// two children, so replace with inorder successor
 		else {
-			
+			// get successor of node to delete (current)
+			Node successor = getSuccessor(current);
+
+			// connect parent of current to successor instead
+			if (current == root) {
+				root = successor;
+			}
+			else if (isLeftChild) {
+				parent.leftChild = successor;
+			}
+			else {
+				parent.rightChild = successor;
+			}
+
+			// connect successor to current's left child
+			successor.leftChild = current.leftChild;
+		} // end else two children
+
+		return true;
+	} // end delete()
+
+
+	// returns node with next highest value after delNode
+	// goes to right child, then right child's left descendents
+	private Node getSuccessor(Node delNode) {
+		Node successorParent = delNode;
+		Node successor = delNode;
+		Node current = delNode.rightChild;
+
+		while (current != null) {
+			successorParent = successor;
+			successor = current;
+			current = current.leftChild;
 		}
 
+		if (successor != delNode.rightChild) {
+			successorParent.leftChild = successor.rightChild;
+			successor.rightChild = delNode.rightChild;
+		}
+		return successor;
 	}
 
 
+	// traversal wrapper
+	public void traverse(int traverseType) {
+		switch(traverseType) {
+			case 1: System.out.print("\nPreorder traversal: ");
+					preOrder(root);
+					break;
+			case 2: System.out.print("\nInorder traversal: ");
+					inOrder(root);
+					break;
+			case 3: System.out.print("\nPostorder traversal: ");
+					postOrder(root);
+					break;
+		}
+		System.out.println();
+	}
 
 
+	private void preOrder(Node localRoot) {
+		if (localRoot != null) {
+			System.out.print(localRoot.iData + " ");
+			preOrder(localRoot.leftChild);
+			preOrder(localRoot.rightChild);
+		}
+	}
 
+
+	private void inOrder(Node localRoot) {
+		if (localRoot != null) {
+			preOrder(localRoot.leftChild);
+			System.out.print(localRoot.iData + " ");
+			preOrder(localRoot.rightChild);
+		}
+	}
+
+
+	private void postOrder(Node localRoot) {
+		if (localRoot != null) {
+			preOrder(localRoot.leftChild);
+			preOrder(localRoot.rightChild);
+			System.out.print(localRoot.iData + " ");
+		}
+	}
 
 }
+
+
+class treeApp {
+	public static void main(String[] args) throws IOException {
+		int value;
+		Tree theTree = new Tree();
+
+		theTree.insert(50, 1.5);
+		theTree.insert(25, 1.2);
+		theTree.insert(75, 1.7);
+		theTree.insert(12, 1.5);
+		theTree.insert(37, 1.2);
+		theTree.insert(43, 1.7);
+		theTree.insert(30, 1.5);
+		theTree.insert(53, 1.2);
+		theTree.insert(87, 1.7);
+		theTree.insert(93, 1.5);
+		theTree.insert(97, 1.5);
+
+		while (true) {
+			System.out.print("Enter first letter of insert, find, delete, or traverse: ");
+			int choice = getChar();
+			switch(choice) {
+				case 'i':
+					System.out.print("Enter value to insert: ");
+					value = getInt();
+					theTree.insert(value, value + 0.9);
+					break;
+				case 'f':
+					System.out.print("Enter value to find: ");
+					value = getInt();
+					Node found = theTree.find(value);
+					if (found != null) {
+						System.out.print("Found: ");
+						found.displayNode();
+						System.out.print("\n");
+					}
+					else {
+						System.out.print("Could not find: ");
+						System.out.print(value + '\n');
+					}
+					break;
+				case 'd':
+					System.out.print("Enter value to delete: ");
+					value = getInt();
+					boolean didDelete = theTree.delete(value);
+					if (didDelete) {
+						System.out.print("Deleted " + value + '\n');
+					}
+					else {
+						System.out.print("Could not delete");
+						System.out.print(value + '\n');
+					}
+					break;
+				case 't':
+					System.out.print("Enter type 1, 2, or 3: ");
+					value = getInt();
+					theTree.traverse(value);
+					break;
+				default:
+					System.out.print("Invalid entry\n");
+			}
+		}
+	} // end main()
+
+	public static String getString() throws IOException {
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);
+		String s = br.readLine();
+		return s;
+	}
+
+	public static char getChar() throws IOException {
+		String s = getString();
+		return s.charAt(0);
+	}
+
+	public static int getInt() throws IOException {
+		String s = getString();
+		return Integer.parseInt(s);
+	}
+
+} // end class treeApp
+
+
