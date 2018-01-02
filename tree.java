@@ -2,6 +2,7 @@
 
 import java.io.*;
 import java.util.*;
+import java.lang.Math;
 
 
 class Node {
@@ -31,6 +32,71 @@ class Tree {
 	}
 	// end constructor
 
+	// getter for root node
+	public Node getRoot() {
+		return root;
+	}
+
+	// get the height of a subtree
+	// initialize iHeight to 0
+	public int height(Node localRoot, int maxHeight) {
+		// find the starting node
+		int lHeight, rHeight;
+
+		if (localRoot != null) {
+			maxHeight++;
+			
+			// keep going down and counting
+			lHeight = height(localRoot.leftChild, maxHeight);
+			rHeight = height(localRoot.rightChild, maxHeight);
+
+			// keep the maximum height of the subtree
+			if (rHeight > lHeight) {
+				maxHeight = rHeight;
+			}
+			else {
+				maxHeight = lHeight;
+			}
+		}
+		
+		return maxHeight;
+	}
+
+	// check if  a subtree is balanced
+	// helper for isTreeBalanced().
+	public boolean isSubtreeBalanced(Node localRoot) {
+		int lHeight = 0;
+		int rHeight = 0;
+
+		// get left subtree height
+		if (localRoot != null) {
+			lHeight = height(localRoot.leftChild, 0);
+			rHeight = height(localRoot.rightChild, 0);
+		}
+
+		// return difference
+		return (Math.abs(lHeight - rHeight) < 2);
+	}
+
+	// check if a while tree is balanced
+	// uses isSubtreeBalanced().
+	public boolean isTreeBalanced(Node localRoot, boolean isBalanced) {
+		boolean lBalanced, rBalanced;
+		if (localRoot != null) {
+			// check if subtrees are balanced, return if not
+			lBalanced = isSubtreeBalanced(localRoot.leftChild);
+			rBalanced = isSubtreeBalanced(localRoot.rightChild);
+
+			// if either side is inbalanced
+			if (lBalanced == false || rBalanced == false) {
+				isBalanced = false;
+			}
+			
+			isTreeBalanced(localRoot.leftChild, isBalanced);
+			isTreeBalanced(localRoot.rightChild, isBalanced);
+		}
+		return isBalanced;
+	}
 
 	// find node with given key
 	public Node find(int key) {
@@ -252,6 +318,10 @@ class treeApp {
 		theTree.insert(93, 1.5);
 		theTree.insert(97, 1.5);
 
+		System.out.println("Height: " + theTree.height(theTree.getRoot(), 0));
+		System.out.println("Tree Balanced: " + theTree.isTreeBalanced(theTree.getRoot(), true));
+
+		/*
 		while (true) {
 			System.out.print("Enter first letter of insert, find, delete, or traverse: ");
 			int choice = getChar();
@@ -296,6 +366,7 @@ class treeApp {
 					System.out.print("Invalid entry\n");
 			}
 		}
+		*/
 	} // end main()
 
 	public static String getString() throws IOException {
