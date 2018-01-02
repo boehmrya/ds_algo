@@ -36,6 +36,7 @@ class Queue {
 // end class Queue
 
 
+
 class Vertex {
 	public char label; // name of vertext (i.e. 'A')
 	public boolean wasVisited;
@@ -48,6 +49,7 @@ class Vertex {
 // end class Vertex
 
 
+// directed graph
 class Graph {
 	private final int MAX_VERTS = 20;
 	private Vertex vertexList[]; // list of vertices
@@ -79,7 +81,6 @@ class Graph {
 
 	public void addEdge(int start, int end) {
 		adjMat[start][end] = 1;
-		adjMat[end][start] = 1;
 	}
 
 
@@ -87,12 +88,12 @@ class Graph {
 		System.out.print(vertexList[v].label);
 	}
 
-
-	public void bfs() { // breadth-first search
-		vertexList[0].wasVisited = true;
-		displayVertex(0);
-		theQueue.insert(0);
+	// determines if there is a path between the start and end vertices
+	public boolean isPath(int start, int end) {
+		vertexList[start].wasVisited = true;
+		theQueue.insert(start);
 		int v2;
+		boolean path = false;
 
 		while( !theQueue.isEmpty() ) {
 			int v1 = theQueue.remove();
@@ -100,16 +101,22 @@ class Graph {
 			// until it has no unvisited neighbors
 			while ( (v2 = getAdjUnvisitedVertex(v1)) != -1) {
 				vertexList[v2].wasVisited = true; // mark it
-				displayVertex(v2);					// display it
 				theQueue.insert(v2);				// insert it
 			} // end while
 		} // end while
+
+		// if the end node was visited, then there is a path
+		if (vertexList[end].wasVisited == true) {
+			path = true;
+		}
 
 		// queue is empty, so we're done
 		for (int j = 0; j < nVerts; j++) {
 			vertexList[j].wasVisited = false;
 		}
-	} // end bfs
+
+		return path;
+	} // end isPath
 
 
 	public int getAdjUnvisitedVertex(int v) {
@@ -124,7 +131,7 @@ class Graph {
 }
 
 
-class BFSApp {
+class dirGraph {
 	public static void main(String[] args) {
 		Graph theGraph = new Graph();
 		theGraph.addVertex('A');
@@ -138,9 +145,11 @@ class BFSApp {
 		theGraph.addEdge(0, 3); // AD
 		theGraph.addEdge(3, 4); // DE
 
-		System.out.print("Visits: ");
-		theGraph.bfs(); // run breadth-first search
-		System.out.println();
+
+		System.out.println(theGraph.isPath(0, 2));
+		System.out.println(theGraph.isPath(2, 4));
+
+		
 	} // end main
 } // end class BFSApp
 
