@@ -428,6 +428,26 @@ class Tree {
 		return status;
 	}
 
+	// find node with given key, and return it's successor
+	public Node findSuccessor(int key) {
+		Node successor = root;
+		Node current = root;
+		while (current.iData != key) {
+			successor = current;
+			if (key < current.iData) {
+				current = current.leftChild;
+			}
+			else {
+				current = current.rightChild;
+			}
+			if (current == null) {
+				return null;
+			}
+		}
+		return successor;
+	} 
+	// end find
+
 }
 
 
@@ -457,7 +477,7 @@ class treeApp {
 		theTree2.orderedInsertion(intArray);
 		//theTree2.inOrder(theTree2.getRoot());
 
-		System.out.println(theTree2.isBinSearchTree(theTree2.getRoot(), true));
+		System.out.println(theTree2.findSuccessor(3).iData);
 
 
 	} // end main()
