@@ -428,7 +428,7 @@ class Tree {
 		return status;
 	}
 
-	// find node with given key, and return it's successor
+	// find successor node with given key, and return it's successor
 	public Node findSuccessor(int key) {
 		Node successor = root;
 		Node current = root;
@@ -446,7 +446,43 @@ class Tree {
 		}
 		return successor;
 	} 
-	// end find
+	// end find successor
+
+	// find first common ancestor of two nodes
+	public Node findCommonAncestor(int key1, int key2) {
+		Node current1 = root;
+		Node current2 = root;
+		Node prev = root; // track the point of divergence
+		while (current1.iData != key1 && current2.iData != key2) {
+
+			if (current1.equals(current2)) {
+				prev = current1;
+			}
+
+			// go down tree to find node 1
+			if (key1 < current1.iData) {
+				current1 = current1.leftChild;
+			}
+			else if (key1 >= current1.iData) {
+				current1 = current1.rightChild;
+			}
+
+			// go down tree to find node 2
+			if (key2 < current2.iData) {
+				current2 = current2.leftChild;
+			}
+			else if (key2 >= current2.iData) {
+				current2 = current2.rightChild;
+			}
+
+			// if either node doesn't exist
+			if (current1 == null || current2 == null) { 
+				return null;
+			}
+		}
+		return prev;
+	} 
+	// end find common ancestor
 
 }
 
@@ -477,7 +513,7 @@ class treeApp {
 		theTree2.orderedInsertion(intArray);
 		//theTree2.inOrder(theTree2.getRoot());
 
-		System.out.println(theTree2.findSuccessor(3).iData);
+		System.out.println(theTree.findCommonAncestor(53, 93).iData);
 
 
 	} // end main()
