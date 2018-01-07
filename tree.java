@@ -409,6 +409,25 @@ class Tree {
 		}
 	}
 
+
+	public boolean isBinSearchTree(Node localRoot, boolean status) {
+		if (localRoot != null) {
+			if (localRoot.leftChild != null) {
+				if (localRoot.leftChild.iData > localRoot.iData) {
+					status = false;
+				}
+			}
+			if (localRoot.rightChild != null) {
+				if (localRoot.rightChild.iData < localRoot.iData) {
+					status = false;
+				}
+			}
+			isBinSearchTree(localRoot.leftChild, status);
+			isBinSearchTree(localRoot.rightChild, status);
+		}
+		return status;
+	}
+
 }
 
 
@@ -436,7 +455,9 @@ class treeApp {
 		Tree theTree2 = new Tree();
 		int[] intArray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 		theTree2.orderedInsertion(intArray);
-		theTree2.inOrder(theTree2.getRoot());
+		//theTree2.inOrder(theTree2.getRoot());
+
+		System.out.println(theTree2.isBinSearchTree(theTree2.getRoot(), true));
 
 
 	} // end main()
