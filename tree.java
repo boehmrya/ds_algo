@@ -393,6 +393,22 @@ class Tree {
 		}
 	}
 
+	public void orderedInsertion(int[] ordArray) {
+		int mid = ordArray.length / 2;
+		int i = mid;
+		int j = mid + 1;
+		while ((i >= 0) || (j < ordArray.length)) {
+			if (i >= 0) {
+				insert(ordArray[i], 0.0);
+				i--;
+			}
+			if (j < ordArray.length) {
+				insert(ordArray[j], 0.0);
+				j++;
+			}
+		}
+	}
+
 }
 
 
@@ -416,13 +432,11 @@ class treeApp {
 		//System.out.println("Height: " + theTree.height(theTree.getRoot(), 0));
 		//System.out.println("Tree Balanced: " + theTree.isTreeBalanced(theTree.getRoot(), true));
 
-		LinkList[] lists;
-		lists = theTree.depthLists();
-		for (int i = 0; i < lists.length; i++)
-			lists[i].displayList();
-		
 		//int[] intArray = new int[10];
+		Tree theTree2 = new Tree();
 		int[] intArray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+		theTree2.orderedInsertion(intArray);
+		theTree2.inOrder(theTree2.getRoot());
 
 
 	} // end main()
