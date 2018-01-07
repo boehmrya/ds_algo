@@ -2,6 +2,8 @@
 // demonstrates heaps
 // to run this program: C>java HeapApp
 import java.io.*;
+import java.util.*;
+
 ////////////////////////////////////////////////////////////////
 
 class Link {
@@ -117,10 +119,39 @@ class Heap
       return null;
    }  // end insert()
 // -------------------------------------------------------------
+   public int height(int key) { // assumes no duplicates
+      int i = 0;
+      int h = 0;
+      int index = -1;
+      int indexR = 0;
+      int indexL = 0;
+
+      while (i < currentSize) {
+         if (heapArray[i].getKey() == key) {
+            index = i;
+         }
+         i++;
+      }
+      if (index != -1) {
+         indexR = (index * 2) + 1;
+         indexL = indexR + 1;
+
+         while (indexR < currentSize || indexL < currentSize) {
+            indexR = (indexR * 2) + 1;
+            indexL = indexR + 1;
+            h++;
+         }
+         return h;
+      }
+      else {
+         return index;
+      }
+   } 
+// -------------------------------------------------------------
    public Node getRightChild(int key) {
       for (int i = 0; i < currentSize; i++) {
          if (heapArray[i].getKey() == key) {
-            int rightChild = 2*i+1;
+            int rightChild = 2*i+2;
             if (rightChild < currentSize) {
                return heapArray[rightChild];
             }
@@ -135,9 +166,25 @@ class Heap
    public Node getLeftChild(int key) {
       for (int i = 0; i < currentSize; i++) {
          if (heapArray[i].getKey() == key) {
-            int leftChild = 2*i+2;
+            int leftChild = 2*i+1;
             if (leftChild < currentSize) {
                return heapArray[leftChild];
+            }
+            else {
+               return null;
+            } 
+         }
+      }
+      return null;
+   }
+
+// -------------------------------------------------------------
+   public Node getParent(int key) {
+      for (int i = 0; i < currentSize; i++) {
+         if (heapArray[i].getKey() == key) {
+            int parent = (i - 1) / 2;
+            if (parent >= 0) {
+               return heapArray[parent];
             }
             else {
                return null;
@@ -235,8 +282,8 @@ class Heap
             status = true;
             LinkList list1 = new LinkList();
             LinkList list2 = new LinkList();
-            inOrder(heapArray[i], list1);
-            other.inOrder(other.peek(), list2);
+            inOrderSub(heapArray[i], list1);
+            other.inOrderSub(other.peek(), list2);
 
             // compare lists of traversed nodes to see if they are equal
             while (!list1.isEmpty()) {
@@ -254,11 +301,60 @@ class Heap
       return status;
    }
 
-   public void inOrder(Node localRoot, LinkList list) {
+   public void inOrderSub(Node localRoot, LinkList list) {
       if (localRoot != null) {
-         inOrder(getLeftChild(localRoot.getKey()), list);
+         inOrderSub(getLeftChild(localRoot.getKey()), list);
          list.insertFirst(localRoot.getKey(), 0.0);
-         inOrder(getRightChild(localRoot.getKey()), list);
+         inOrderSub(getRightChild(localRoot.getKey()), list);
+      }
+   }
+
+   // prints all paths that sum to a given value (param sum)
+   public void printAllPathsSum(int sum) {
+      for (int i = 0; i < currentSize; i++) {
+         int h = height(heapArray[i].getKey());
+         int paths = 2;
+         for (int j = 1; j <= h; j++) {
+            paths *= 2;
+         }
+
+         // vars for tree traversal
+         LinkedList<Node> nodes = new LinkedList();
+         LinkedList<Integer> sums = new LinkedList();
+         int currentSum = 0;
+         int index = -1;
+
+         // traverse sum tree, build arrays for nodes and sums
+         preOrderSums(heapArray[i], nodes, sums, currentSum);
+
+         int j = 0;
+         while (j < sums.size()) {
+            if (sums.get(j) == sum) {
+               Node parent = nodes.get(j);
+               while (parent.getKey() != heapArray[i].getKey()) {
+                  System.out.print(parent.getKey() + " "); //print node
+                  parent = getParent(parent.getKey()); // traverse up to parent
+               }
+               System.out.print(parent.getKey()); // print localroot
+               System.out.println(); // line break;
+            }
+            j++;
+         }
+      }
+   }
+
+   public void preOrderSums(Node localRoot, LinkedList<Node> nodes, LinkedList<Integer> sums, int currentSum) {
+      if (localRoot != null) {
+
+         // do work at current node
+         currentSum += localRoot.getKey();
+         nodes.add(localRoot);
+         sums.add(currentSum);
+
+         preOrderSums(getLeftChild(localRoot.getKey()), nodes, sums, currentSum);
+
+         preOrderSums(getRightChild(localRoot.getKey()), nodes, sums, currentSum);
+
       }
    }
 
@@ -319,13 +415,18 @@ class HeapApp
       theHeap.insert(70);           // insert 10 items
       theHeap.insert(40);
       theHeap.insert(50);
+      theHeap.insert(20);
+      theHeap.insert(10);
+      theHeap.insert(5);
+      theHeap.insert(3);
+      theHeap.insert(2);
 
       Heap theHeap2 = new Heap(31);
       theHeap2.insert(70);
       theHeap2.insert(40);
       theHeap2.insert(50);
 
-      System.out.println(theHeap.isSubHeap(theHeap2));
+      theHeap.printAllPathsSum(50);
 
 
      
