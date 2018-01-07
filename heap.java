@@ -4,6 +4,70 @@
 import java.io.*;
 ////////////////////////////////////////////////////////////////
 
+class Link {
+   public int iData;              // data item
+   public double dData;           // data item
+   public Link next;              // next link in list
+
+   public Link(int id, double dd) {
+      iData = id;                 // initialize data
+      dData = dd;                 // ('next' is automatically
+   }    
+
+   public void displayLink() {
+      System.out.print("{" + iData + ", " + dData + "} ");
+  }
+}  // end class Link
+
+
+
+class LinkList
+   {
+   private Link first;            // ref to first link on list
+
+// -------------------------------------------------------------
+   public LinkList()              // constructor
+      {
+      first = null;               // no links on list yet
+      }
+// -------------------------------------------------------------
+   public boolean isEmpty()       // true if list is empty
+      {
+      return (first==null);
+      }
+// -------------------------------------------------------------
+                                  // insert at start of list
+   public void insertFirst(int id, double dd)
+      {                           // make new link
+      Link newLink = new Link(id, dd);
+      newLink.next = first;       // newLink --> old first
+      first = newLink;            // first --> newLink
+      }
+// -------------------------------------------------------------
+   public Link deleteFirst()      // delete first item
+      {                           // (assumes list not empty)
+      Link temp = first;          // save reference to link
+      first = first.next;         // delete it: first-->old next
+      return temp;                // return deleted link
+      }
+// -------------------------------------------------------------
+   public void displayList()
+      {
+      System.out.print("List (first-->last): ");
+      Link current = first;       // start at beginning of list
+      while(current != null)      // until end of list,
+         {
+         current.displayLink();   // print data
+         current = current.next;  // move to next link
+         }
+      System.out.println("");
+      }
+// -------------------------------------------------------------
+}  // end class LinkList
+
+
+
+
 class Node
    {
    private int iData;             // data item (key)
@@ -35,6 +99,53 @@ class Heap
 // -------------------------------------------------------------
    public boolean isEmpty()
       { return currentSize==0; }
+// -------------------------------------------------------------
+   public int getSize() { 
+      return currentSize; 
+   }
+// -------------------------------------------------------------
+   public Node peek() { // returns (but does not remove) max item
+      return heapArray[0];
+   }
+// -------------------------------------------------------------
+   public Node find(int key) { // assumes no duplicates
+      for (int i = 0; i < currentSize; i++) {
+         if (heapArray[i].getKey() == key) {
+            return heapArray[i];
+         }
+      }
+      return null;
+   }  // end insert()
+// -------------------------------------------------------------
+   public Node getRightChild(int key) {
+      for (int i = 0; i < currentSize; i++) {
+         if (heapArray[i].getKey() == key) {
+            int rightChild = 2*i+1;
+            if (rightChild < currentSize) {
+               return heapArray[rightChild];
+            }
+            else {
+               return null;
+            } 
+         }
+      }
+      return null;
+   }
+// -------------------------------------------------------------
+   public Node getLeftChild(int key) {
+      for (int i = 0; i < currentSize; i++) {
+         if (heapArray[i].getKey() == key) {
+            int leftChild = 2*i+2;
+            if (leftChild < currentSize) {
+               return heapArray[leftChild];
+            }
+            else {
+               return null;
+            } 
+         }
+      }
+      return null;
+   }
 // -------------------------------------------------------------
    public boolean insert(int key)
       {
@@ -108,6 +219,50 @@ class Heap
       return true;
       }  // end change()
 // -------------------------------------------------------------
+   // checks if other heap is a sub-heap of this heap
+   // returns true if so, otherwise false
+   public boolean isSubHeap(Heap other) {
+      // if other heap is larger than this one, it's not a subtree
+      if (currentSize < other.getSize()) {
+         return false;
+      }
+      boolean status = false;
+
+      for (int i = 0; i < currentSize; i++) {
+         // if current node of heap 1 equals root of heap 2, then
+         // stop and compare all children
+         if (heapArray[i].getKey() == other.peek().getKey()) { 
+            status = true;
+            LinkList list1 = new LinkList();
+            LinkList list2 = new LinkList();
+            inOrder(heapArray[i], list1);
+            other.inOrder(other.peek(), list2);
+
+            // compare lists of traversed nodes to see if they are equal
+            while (!list1.isEmpty()) {
+               if (list1.deleteFirst().iData != list2.deleteFirst().iData) {
+                  status = false; 
+                  break;
+               }
+            }
+            // if list 2 is not empty, then not a subtree
+            if (status == true && !list2.isEmpty()) {
+               status = false;
+            }
+         }
+      }
+      return status;
+   }
+
+   public void inOrder(Node localRoot, LinkList list) {
+      if (localRoot != null) {
+         inOrder(getLeftChild(localRoot.getKey()), list);
+         list.insertFirst(localRoot.getKey(), 0.0);
+         inOrder(getRightChild(localRoot.getKey()), list);
+      }
+   }
+
+// -------------------------------------------------------------
    public void displayHeap()
       {
       System.out.print("heapArray: ");    // array format
@@ -153,6 +308,7 @@ class Heap
    }  // end class Heap
 ////////////////////////////////////////////////////////////////
 class HeapApp
+
    {
    public static void main(String[] args) throws IOException
       {
@@ -163,13 +319,14 @@ class HeapApp
       theHeap.insert(70);           // insert 10 items
       theHeap.insert(40);
       theHeap.insert(50);
-      theHeap.insert(20);
-      theHeap.insert(60);
-      theHeap.insert(100);
-      theHeap.insert(80);
-      theHeap.insert(30);
-      theHeap.insert(10);
-      theHeap.insert(90);
+
+      Heap theHeap2 = new Heap(31);
+      theHeap2.insert(70);
+      theHeap2.insert(40);
+      theHeap2.insert(50);
+
+      System.out.println(theHeap.isSubHeap(theHeap2));
+
 
      
       }  // end main()
