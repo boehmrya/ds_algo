@@ -5,6 +5,71 @@ import java.util.*;
 import java.lang.Math;
 
 
+class Link {
+   public int iData;              // data item
+   public double dData;           // data item
+   public Link next;              // next link in list
+
+   public Link(int id, double dd) {
+      iData = id;                 // initialize data
+      dData = dd;                 // ('next' is automatically
+   }    
+
+   public void displayLink() {
+      System.out.print("{" + iData + ", " + dData + "} ");
+  }
+}  // end class Link
+
+
+
+class LinkList
+   {
+   private Link first;            // ref to first link on list
+
+// -------------------------------------------------------------
+   public LinkList()              // constructor
+      {
+      first = null;               // no links on list yet
+      }
+// -------------------------------------------------------------
+   public boolean isEmpty()       // true if list is empty
+      {
+      return (first==null);
+      }
+// -------------------------------------------------------------
+                                  // insert at start of list
+   public void insertFirst(int id, double dd)
+      {                           // make new link
+      Link newLink = new Link(id, dd);
+      newLink.next = first;       // newLink --> old first
+      first = newLink;            // first --> newLink
+      }
+// -------------------------------------------------------------
+   public Link deleteFirst()      // delete first item
+      {                           // (assumes list not empty)
+      Link temp = first;          // save reference to link
+      first = first.next;         // delete it: first-->old next
+      return temp;                // return deleted link
+      }
+// -------------------------------------------------------------
+   public void displayList()
+      {
+      System.out.print("List (first-->last): ");
+      Link current = first;       // start at beginning of list
+      while(current != null)      // until end of list,
+         {
+         current.displayLink();   // print data
+         current = current.next;  // move to next link
+         }
+      System.out.println("");
+      }
+// -------------------------------------------------------------
+}  // end class LinkList
+
+
+
+
+
 class Node {
 	public int iData; // key 
 	public double dData; // value
@@ -45,7 +110,7 @@ class Tree {
 
 		if (localRoot != null) {
 			maxHeight++;
-			
+
 			// keep going down and counting
 			lHeight = height(localRoot.leftChild, maxHeight);
 			rHeight = height(localRoot.rightChild, maxHeight);
@@ -61,6 +126,53 @@ class Tree {
 		
 		return maxHeight;
 	}
+
+
+	// get the depth of a node
+	// returns -1 if not in tree
+	public int depth(int key) {
+		Node current = root;
+		int d = 0;
+		while (current.iData != key) {
+			if (key < current.iData) {
+				current = current.leftChild;
+			}
+			else {
+				current = current.rightChild;
+			}
+			if (current == null) {
+				return -1;
+			}
+			d++;
+		}
+		return d;
+	}
+
+
+	// creates an array of linked lists which include the nodes
+	// at each depth in the tree
+	public LinkList[] depthLists() {
+		int d;
+		int h = height(getRoot(), 0);
+		LinkList[] lists = new LinkList[h];
+		// traverse and build lists
+		inOrderDepth(root, lists);
+		return lists;
+	}
+
+
+	public void inOrderDepth(Node localRoot, LinkList[] lists) {
+		if (localRoot != null) {
+			inOrderDepth(localRoot.leftChild, lists);
+			int d = depth(localRoot.iData);
+			if (lists[d] == null) {
+				lists[d] = new LinkList();
+			}
+			lists[d].insertFirst(localRoot.iData, 0.0);
+			inOrderDepth(localRoot.rightChild, lists);
+		}
+	}
+
 
 	// check if  a subtree is balanced
 	// helper for isTreeBalanced().
@@ -255,24 +367,7 @@ class Tree {
 	}
 
 
-	// traversal wrapper
-	public void traverse(int traverseType) {
-		switch(traverseType) {
-			case 1: System.out.print("\nPreorder traversal: ");
-					preOrder(root);
-					break;
-			case 2: System.out.print("\nInorder traversal: ");
-					inOrder(root);
-					break;
-			case 3: System.out.print("\nPostorder traversal: ");
-					postOrder(root);
-					break;
-		}
-		System.out.println();
-	}
-
-
-	private void preOrder(Node localRoot) {
+	public void preOrder(Node localRoot) {
 		if (localRoot != null) {
 			System.out.print(localRoot.iData + " ");
 			preOrder(localRoot.leftChild);
@@ -281,19 +376,19 @@ class Tree {
 	}
 
 
-	private void inOrder(Node localRoot) {
+	public void inOrder(Node localRoot) {
 		if (localRoot != null) {
-			preOrder(localRoot.leftChild);
+			inOrder(localRoot.leftChild);
 			System.out.print(localRoot.iData + " ");
-			preOrder(localRoot.rightChild);
+			inOrder(localRoot.rightChild);
 		}
 	}
 
 
-	private void postOrder(Node localRoot) {
+	public void postOrder(Node localRoot) {
 		if (localRoot != null) {
-			preOrder(localRoot.leftChild);
-			preOrder(localRoot.rightChild);
+			postOrder(localRoot.leftChild);
+			postOrder(localRoot.rightChild);
 			System.out.print(localRoot.iData + " ");
 		}
 	}
@@ -318,55 +413,18 @@ class treeApp {
 		theTree.insert(93, 1.5);
 		theTree.insert(97, 1.5);
 
-		System.out.println("Height: " + theTree.height(theTree.getRoot(), 0));
-		System.out.println("Tree Balanced: " + theTree.isTreeBalanced(theTree.getRoot(), true));
+		//System.out.println("Height: " + theTree.height(theTree.getRoot(), 0));
+		//System.out.println("Tree Balanced: " + theTree.isTreeBalanced(theTree.getRoot(), true));
 
-		/*
-		while (true) {
-			System.out.print("Enter first letter of insert, find, delete, or traverse: ");
-			int choice = getChar();
-			switch(choice) {
-				case 'i':
-					System.out.print("Enter value to insert: ");
-					value = getInt();
-					theTree.insert(value, value + 0.9);
-					break;
-				case 'f':
-					System.out.print("Enter value to find: ");
-					value = getInt();
-					Node found = theTree.find(value);
-					if (found != null) {
-						System.out.print("Found: ");
-						found.displayNode();
-						System.out.print("\n");
-					}
-					else {
-						System.out.print("Could not find: ");
-						System.out.print(value + '\n');
-					}
-					break;
-				case 'd':
-					System.out.print("Enter value to delete: ");
-					value = getInt();
-					boolean didDelete = theTree.delete(value);
-					if (didDelete) {
-						System.out.print("Deleted " + value + '\n');
-					}
-					else {
-						System.out.print("Could not delete");
-						System.out.print(value + '\n');
-					}
-					break;
-				case 't':
-					System.out.print("Enter type 1, 2, or 3: ");
-					value = getInt();
-					theTree.traverse(value);
-					break;
-				default:
-					System.out.print("Invalid entry\n");
-			}
-		}
-		*/
+		LinkList[] lists;
+		lists = theTree.depthLists();
+		for (int i = 0; i < lists.length; i++)
+			lists[i].displayList();
+		
+		//int[] intArray = new int[10];
+		int[] intArray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+
 	} // end main()
 
 	public static String getString() throws IOException {
