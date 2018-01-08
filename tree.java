@@ -428,6 +428,7 @@ class Tree {
 		return status;
 	}
 
+
 	// find successor node with given key, and return it's successor
 	public Node findSuccessor(int key) {
 		Node successor = root;
@@ -447,6 +448,7 @@ class Tree {
 		return successor;
 	} 
 	// end find successor
+
 
 	// find first common ancestor of two nodes
 	public Node findCommonAncestor(int key1, int key2) {
