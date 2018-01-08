@@ -65,11 +65,62 @@ class bitManipulation {
 		System.out.println("Next largest: " + nextLargest);
 	}
 
+	// number of bits to flip num1 to num2
+	public static int numFlips(int num1, int num2) {
+		StringBuilder num1String = new StringBuilder();
+		StringBuilder num2String = new StringBuilder();
+		int num1Len = 0;
+		int num2Len = 0;
+		int diff = 0;
+		int numFlips = 0;
+
+		// get bit strings of num1 and num2
+		num1String = binString(num1);
+		num2String = binString(num2);
+		num1Len = num1String.length();
+		num2Len = num2String.length();
+
+		// build out strings if they have different lengths
+		if (num1Len < num2Len) {
+			diff = num2Len - num1Len;
+			num1String.reverse();
+			int i = 0;
+			while (i < diff) {
+				num1String.append("0");
+				i++;
+			}
+			num1String.reverse();
+		}
+		else if (num2Len < num1Len) {
+			diff = num1Len - num2Len;
+			int i = 0;
+			while (i < diff) {
+				num2String.append("0");
+				i++;
+			}
+			num2String.reverse();
+		}
+
+		// check number of flips necessary by comparing strings
+		int i = 0;
+		while(i < num1String.length()) {
+			char c1 = num1String.charAt(i);
+			char c2 = num2String.charAt(i);
+			if (c1 != c2) {
+				numFlips++;
+			}
+			i++;
+		}
+		return numFlips;
+	}
+
 	
 
 	public static void main(String[] args) {
-		int num = 27;
-		printNext(num);
+		int num1 = 23;
+		int num2 = 15;
+		System.out.println(numFlips(num1, num2));
+
 		
 	}
 }
